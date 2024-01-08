@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Tic-tac-toe</title>
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="head">
+      <form>
+        <label for="dificulty">Dificulty</label>
+        <select id="dificulty" name="Dificulty">
+        <option value="multiplayer">Multiplayer</option>
+        <option value="eazy">Eazy</option>
+        <option value="medium">Medium</option>
+        <!-- <option value="imposible">Imposible</option> -->
+        <input type="submit" />
+      </form>
+      <h1 id="playerText">TIC TAC TOE</h1>
+    </div>
+    <div class="main-component">
+      <div class="el" id="0"></div>
+      <div class="el" id="1"></div>
+      <div class="el right-border" id="2"></div>
+      <div class="el" id="3"></div>
+      <div class="el" id="4"></div>
+      <div class="el right-border" id="5"></div>
+      <div class="el bottom-border" id="6"></div>
+      <div class="el bottom-border" id="7"></div>
+      <div class="el bottom-border right-border" id="8"></div>
+    </div>
+
+    <div class="container-score">
+      <!-- <p class="score">Score:0</p> -->
+    </div>
+    <div class="container-button">
+      <button id="restartBtn">Restart</button>
+    </div>
+  </body>
+</html>
