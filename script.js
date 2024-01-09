@@ -7,6 +7,7 @@ let bord = document.querySelector(".main-component");
 let gameMode = "Multiplayer";
 let dificulty = document.querySelector("select");
 dificulty.addEventListener("change", function () {
+  restart();
   return (gameMode = dificulty.options[dificulty.selectedIndex].text);
 });
 //selecting game mode
