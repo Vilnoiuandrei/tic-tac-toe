@@ -29,10 +29,10 @@ function boxClicked(e) {
     spaces[id] = currentPlayer;
     e.target.innerText = currentPlayer;
 
-    if (playerHasWon() !== false) {
+    if (playerHasWon(spaces) !== false) {
       bord.classList.add("stop-pres");
       playerText.innerHTML = `${currentPlayer} has won!`;
-    } else if (playerHasWon() === false && !spaces.includes(null)) {
+    } else if (playerHasWon(spaces) === false && !spaces.includes(null)) {
       playerText.innerHTML = "Tie";
     } else {
       if (gameMode === "Multiplayer") {
@@ -44,6 +44,9 @@ function boxClicked(e) {
       if (gameMode === "Medium") {
         aiMedium();
       }
+      if (gameMode === "Impossible") {
+        aiImpossible();
+      }
     }
   }
 }
@@ -54,6 +57,7 @@ function aiEazy() {
     }
     return acc;
   }, []);
+  //emty spaces
 
   if (emptySpaces.length > 0) {
     const randomIndex = Math.floor(Math.random() * emptySpaces.length);
@@ -65,10 +69,10 @@ function aiEazy() {
     }
     setTimeout(displayTextAi, 600);
 
-    if (playerHasWon() !== false) {
+    if (playerHasWon(spaces) !== false) {
       bord.classList.add("stop-pres");
       playerText.innerHTML = `${ai} has won!`;
-    } else if (playerHasWon() === false && !spaces.includes(null)) {
+    } else if (playerHasWon(spaces) === false && !spaces.includes(null)) {
       playerText.innerHTML = "Tie";
     }
   }
@@ -101,11 +105,110 @@ function aiMedium() {
     aiMove(7);
   }
 
-  if (playerHasWon() !== false) {
+  if (playerHasWon(spaces) !== false) {
     bord.classList.add("stop-pres");
     playerText.innerHTML = `${ai} has won!`;
-  } else if (playerHasWon() === false && !spaces.includes(null)) {
+  } else if (playerHasWon(spaces) === false && !spaces.includes(null)) {
     playerText.innerHTML = "Tie";
+  }
+}
+
+function aiImpossible() {
+  let winCheck = function (board, player) {
+    for (const condition of winningCombos) {
+      let [a, b, c] = condition;
+
+      if (
+        board[a] &&
+        board[a] === board[b] &&
+        board[a] === board[c] &&
+        board[a] === player
+      ) {
+        return true;
+      }
+    }
+    return false;
+  };
+  const emptySpaces = spaces.reduce((acc, value, index) => {
+    if (!value) {
+      acc.push(index);
+    }
+    return acc;
+  }, []);
+
+  if (emptySpaces.length > 0) {
+    const bestMove = minimax(spaces.slice(), 0, true).index; // Call minimax
+    spaces[bestMove] = ai;
+
+    function displayTextAi() {
+      squares[bestMove].innerText = ai;
+    }
+
+    setTimeout(displayTextAi, 600);
+
+    const winner = playerHasWon(spaces);
+
+    if (winner !== false) {
+      bord.classList.add("stop-pres");
+      playerText.innerHTML = `${ai} has won!`;
+    } else if (winner === false && !spaces.includes(null)) {
+      playerText.innerHTML = "Tie";
+    }
+  }
+  function minimax(board, depth, maximizingPlayer) {
+    const emptySpaces = emptyIndexies(board);
+
+    if (winCheck(board, X_TEXT)) {
+      return { score: -1 };
+    } else if (winCheck(board, O_TEXT)) {
+      return { score: 1 };
+    } else if (emptySpaces.length === 0) {
+      return { score: 0 };
+    }
+
+    const moves = [];
+
+    for (let i = 0; i < emptySpaces.length; i++) {
+      const move = {};
+      move.index = emptySpaces[i];
+      board[emptySpaces[i]] = maximizingPlayer ? O_TEXT : X_TEXT;
+
+      const result = minimax(board, depth + 1, !maximizingPlayer);
+      move.score = result.score;
+
+      board[emptySpaces[i]] = null;
+      moves.push(move);
+    }
+
+    let bestMove;
+    if (maximizingPlayer) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < moves.length; i++) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+
+    return moves[bestMove];
+  }
+
+  function emptyIndexies(board) {
+    return board.reduce((acc, value, index) => {
+      if (!value) {
+        acc.push(index);
+      }
+      return acc;
+    }, []);
   }
 }
 const winningCombos = [
@@ -118,18 +221,18 @@ const winningCombos = [
   [0, 4, 8],
   [2, 4, 6],
 ];
-function playerHasWon() {
+
+function playerHasWon(board) {
   for (const condition of winningCombos) {
     let [a, b, c] = condition;
 
-    if (spaces[a] && spaces[a] == spaces[b] && spaces[a] == spaces[c]) {
+    if (board[a] && board[a] == board[b] && board[a] == board[c]) {
       return [a, b, c];
     }
   }
   return false;
 }
-playerHasWon();
-
+playerHasWon(spaces);
 restartBtn.addEventListener("click", restart);
 
 function restart() {
