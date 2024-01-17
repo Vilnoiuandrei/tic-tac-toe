@@ -3,15 +3,18 @@ const circle = document.querySelector(".circle");
 let squares = Array.from(document.getElementsByClassName("el"));
 let restartBtn = document.getElementById("restartBtn");
 let bord = document.querySelector(".main-component");
+let score = document.getElementById("score");
+let scorePLayer1 = 0;
+let scorePlayer2 = 0;
 
 let gameMode = "Multiplayer";
 let dificulty = document.querySelector("select");
 dificulty.addEventListener("change", function () {
+  resestScore();
   restart();
   return (gameMode = dificulty.options[dificulty.selectedIndex].text);
 });
 //selecting game mode
-
 const O_TEXT = "O";
 const X_TEXT = "X";
 let currentPlayer = X_TEXT;
@@ -30,10 +33,16 @@ function boxClicked(e) {
     e.target.innerText = currentPlayer;
 
     if (playerHasWon(spaces) !== false) {
+      if (currentPlayer === X_TEXT) {
+        scorePLayer1++;
+      } else {
+        scorePlayer2++;
+      }
+      score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
       bord.classList.add("stop-pres");
-      playerText.innerHTML = `${currentPlayer} has won!`;
+      // playerText.innerHTML = `${currentPlayer} has won!`;
     } else if (playerHasWon(spaces) === false && !spaces.includes(null)) {
-      playerText.innerHTML = "Tie";
+      // playerText.innerHTML = "Tie";
     } else {
       if (gameMode === "Multiplayer") {
         currentPlayer = currentPlayer == X_TEXT ? O_TEXT : X_TEXT;
@@ -71,9 +80,12 @@ function aiEazy() {
 
     if (playerHasWon(spaces) !== false) {
       bord.classList.add("stop-pres");
-      playerText.innerHTML = `${ai} has won!`;
+      scorePlayer2++;
+      score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
+
+      // playerText.innerHTML = `${ai} has won!`;
     } else if (playerHasWon(spaces) === false && !spaces.includes(null)) {
-      playerText.innerHTML = "Tie";
+      // playerText.innerHTML = "Tie";
     }
   }
 }
@@ -107,9 +119,10 @@ function aiMedium() {
 
   if (playerHasWon(spaces) !== false) {
     bord.classList.add("stop-pres");
-    playerText.innerHTML = `${ai} has won!`;
+    scorePlayer2++;
+    score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
   } else if (playerHasWon(spaces) === false && !spaces.includes(null)) {
-    playerText.innerHTML = "Tie";
+    // playerText.innerHTML = "Tie";
   }
 }
 
@@ -150,9 +163,11 @@ function aiImpossible() {
 
     if (winner !== false) {
       bord.classList.add("stop-pres");
-      playerText.innerHTML = `${ai} has won!`;
+      // playerText.innerHTML = `${ai} has won!`;
+      scorePlayer2++;
+      score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
     } else if (winner === false && !spaces.includes(null)) {
-      playerText.innerHTML = "Tie";
+      // playerText.innerHTML = "Tie";
     }
   }
   function minimax(board, depth, maximizingPlayer) {
@@ -233,6 +248,7 @@ function playerHasWon(board) {
   return false;
 }
 playerHasWon(spaces);
+
 restartBtn.addEventListener("click", restart);
 
 function restart() {
@@ -244,9 +260,13 @@ function restart() {
     el.style.backgroundColor = "";
   });
 
-  playerText.innerHTML = "Tic Tac Toe";
+  // playerText.innerHTML = "Tic Tac Toe";
 
   currentPlayer = X_TEXT;
 }
-
+function resestScore() {
+  scorePLayer1 = 0;
+  scorePlayer2 = 0;
+  score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
+}
 startGame();
