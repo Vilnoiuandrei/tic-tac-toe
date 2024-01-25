@@ -23,12 +23,6 @@ const X_TEXT = "X";
 let currentPlayer = X_TEXT;
 let ai = O_TEXT;
 let spaces = Array(9).fill(null);
-const emptySpaces = spaces.reduce((acc, value, index) => {
-  if (!value) {
-    acc.push(index);
-  }
-  return acc;
-}, []);
 
 const startGame = () => {
   squares.forEach((el) => el.addEventListener("click", boxClicked));
@@ -86,6 +80,12 @@ function boxClicked(e) {
   }
 }
 function aiEazy() {
+  let emptySpaces = spaces.reduce((acc, value, index) => {
+    if (!value) {
+      acc.push(index);
+    }
+    return acc;
+  }, []);
   if (emptySpaces.length > 0) {
     const randomIndex = Math.floor(Math.random() * emptySpaces.length);
     const aiMove = emptySpaces[randomIndex];
@@ -131,6 +131,12 @@ function aiMedium() {
 }
 
 function aiImpossible() {
+  let emptySpaces = spaces.reduce((acc, value, index) => {
+    if (!value) {
+      acc.push(index);
+    }
+    return acc;
+  }, []);
   if (emptySpaces.length > 0) {
     const bestMove = minimax(spaces.slice(), 0, true).index; // Call minimax
     spaces[bestMove] = ai;
@@ -210,7 +216,6 @@ const winningCombos = [
 ];
 function checkWinAi() {
   if (playerHasWon(spaces, ai) !== false) {
-    console.log("1");
     bord.classList.add("stop-pres");
     score2++;
     scorePlayer2.textContent = score2;
