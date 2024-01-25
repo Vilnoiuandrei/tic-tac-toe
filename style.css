@@ -57,6 +57,7 @@ h1 {
 }
 
 button {
+  z-index: 100;
   color: #904e9c;
   background: #fae8b9;
   display: block;
@@ -101,13 +102,24 @@ button:active {
   justify-content: center;
   align-content: center;
 }
-.score {
+#score {
   padding-bottom: 1rem;
   font-weight: 600;
   letter-spacing: 0.3px;
-  font-size: 1.2rem;
+  font-size: 5rem;
 }
-
+#player1,
+#player2 {
+  transition: all 100ms ease-in;
+}
+.score-animation {
+  color: #904e9c;
+  font-size: 5.1rem;
+}
+select {
+  color: #904e9c;
+  border-radius: 0.5rem;
+}
 .head {
   padding-top: 3rem;
   display: flex;
@@ -125,6 +137,22 @@ form {
 select {
   background: #dfa7a7;
   color: rgb(75, 2, 2);
+}
+.winning-message {
+  background: #b5d1e6;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  color: #904e9c;
+  font-size: 10rem;
+  animation: popupFadeIn 0.3s ease-out;
+}
+
+.hide {
+  display: none;
 }
 @media only screen and (max-width: 44em) {
   .main-component {
@@ -144,5 +172,16 @@ select {
 
   h1 {
     margin-top: 5rem;
+  }
+  .winning-message {
+    font-size: 6rem;
+  }
+}
+@keyframes popupFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

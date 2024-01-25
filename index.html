@@ -14,6 +14,9 @@
     <script src="script.js" defer></script>
   </head>
   <body>
+    <div class="winning-message hide">
+      <span>X won</span>
+    </div>
     <div class="head">
       <select>
         <option selected="true" disabled="disabled">Game mode</option>
@@ -23,7 +26,9 @@
         <option value="impossible">Impossible</option>
       </select>
 
-      <h1 id="score">Score:0-0</h1>
+      <h1 id="score">
+        Score:<span id="player1">0</span>-<span id="player2">0</span>
+      </h1>
     </div>
     <div class="main-component">
       <div class="el" id="0"></div>

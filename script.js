@@ -4,8 +4,11 @@ let squares = Array.from(document.getElementsByClassName("el"));
 let restartBtn = document.getElementById("restartBtn");
 let bord = document.querySelector(".main-component");
 let score = document.getElementById("score");
-let scorePLayer1 = 0;
-let scorePlayer2 = 0;
+let scorePLayer1 = document.getElementById("player1");
+let scorePlayer2 = document.getElementById("player2");
+let score1 = 0;
+let score2 = 0;
+const winningMessage = document.querySelector(".winning-message");
 
 let gameMode = "Multiplayer";
 let dificulty = document.querySelector("select");
@@ -20,6 +23,12 @@ const X_TEXT = "X";
 let currentPlayer = X_TEXT;
 let ai = O_TEXT;
 let spaces = Array(9).fill(null);
+const emptySpaces = spaces.reduce((acc, value, index) => {
+  if (!value) {
+    acc.push(index);
+  }
+  return acc;
+}, []);
 
 const startGame = () => {
   squares.forEach((el) => el.addEventListener("click", boxClicked));
@@ -32,17 +41,34 @@ function boxClicked(e) {
     spaces[id] = currentPlayer;
     e.target.innerText = currentPlayer;
 
-    if (playerHasWon(spaces) !== false) {
+    if (playerHasWon(spaces, currentPlayer) !== false) {
       if (currentPlayer === X_TEXT) {
-        scorePLayer1++;
+        score1++;
+        scorePLayer1.textContent = score1;
+        scorePLayer1.classList.add("score-animation");
+        setTimeout(() => {
+          scorePLayer1.classList.remove("score-animation");
+          winningMessage.classList.remove("hide");
+        }, 1000);
       } else {
-        scorePlayer2++;
+        score2++;
+        scorePlayer2.textContent = score2;
+        scorePlayer2.classList.add("score-animation");
+        setTimeout(() => {
+          scorePlayer2.classList.remove("score-animation");
+          winningMessage.classList.remove("hide");
+        }, 1000);
       }
-      score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
+
       bord.classList.add("stop-pres");
-      // playerText.innerHTML = `${currentPlayer} has won!`;
-    } else if (playerHasWon(spaces) === false && !spaces.includes(null)) {
-      // playerText.innerHTML = "Tie";
+
+      winningMessage.innerHTML = `${currentPlayer} has won`;
+    } else if (
+      playerHasWon(spaces, currentPlayer) === false &&
+      !spaces.includes(null)
+    ) {
+      winningMessage.classList.remove("hide");
+      winningMessage.innerHTML = "Tie";
     } else {
       if (gameMode === "Multiplayer") {
         currentPlayer = currentPlayer == X_TEXT ? O_TEXT : X_TEXT;
@@ -60,14 +86,6 @@ function boxClicked(e) {
   }
 }
 function aiEazy() {
-  const emptySpaces = spaces.reduce((acc, value, index) => {
-    if (!value) {
-      acc.push(index);
-    }
-    return acc;
-  }, []);
-  //emty spaces
-
   if (emptySpaces.length > 0) {
     const randomIndex = Math.floor(Math.random() * emptySpaces.length);
     const aiMove = emptySpaces[randomIndex];
@@ -78,15 +96,7 @@ function aiEazy() {
     }
     setTimeout(displayTextAi, 600);
 
-    if (playerHasWon(spaces) !== false) {
-      bord.classList.add("stop-pres");
-      scorePlayer2++;
-      score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
-
-      // playerText.innerHTML = `${ai} has won!`;
-    } else if (playerHasWon(spaces) === false && !spaces.includes(null)) {
-      // playerText.innerHTML = "Tie";
-    }
+    checkWinAi();
   }
 }
 function aiMedium() {
@@ -117,38 +127,10 @@ function aiMedium() {
     aiMove(7);
   }
 
-  if (playerHasWon(spaces) !== false) {
-    bord.classList.add("stop-pres");
-    scorePlayer2++;
-    score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
-  } else if (playerHasWon(spaces) === false && !spaces.includes(null)) {
-    // playerText.innerHTML = "Tie";
-  }
+  checkWinAi();
 }
 
 function aiImpossible() {
-  let winCheck = function (board, player) {
-    for (const condition of winningCombos) {
-      let [a, b, c] = condition;
-
-      if (
-        board[a] &&
-        board[a] === board[b] &&
-        board[a] === board[c] &&
-        board[a] === player
-      ) {
-        return true;
-      }
-    }
-    return false;
-  };
-  const emptySpaces = spaces.reduce((acc, value, index) => {
-    if (!value) {
-      acc.push(index);
-    }
-    return acc;
-  }, []);
-
   if (emptySpaces.length > 0) {
     const bestMove = minimax(spaces.slice(), 0, true).index; // Call minimax
     spaces[bestMove] = ai;
@@ -158,24 +140,13 @@ function aiImpossible() {
     }
 
     setTimeout(displayTextAi, 600);
-
-    const winner = playerHasWon(spaces);
-
-    if (winner !== false) {
-      bord.classList.add("stop-pres");
-      // playerText.innerHTML = `${ai} has won!`;
-      scorePlayer2++;
-      score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
-    } else if (winner === false && !spaces.includes(null)) {
-      // playerText.innerHTML = "Tie";
-    }
   }
   function minimax(board, depth, maximizingPlayer) {
     const emptySpaces = emptyIndexies(board);
 
-    if (winCheck(board, X_TEXT)) {
+    if (playerHasWon(board, X_TEXT)) {
       return { score: -1 };
-    } else if (winCheck(board, O_TEXT)) {
+    } else if (playerHasWon(board, O_TEXT)) {
       return { score: 1 };
     } else if (emptySpaces.length === 0) {
       return { score: 0 };
@@ -216,6 +187,7 @@ function aiImpossible() {
 
     return moves[bestMove];
   }
+  checkWinAi();
 
   function emptyIndexies(board) {
     return board.reduce((acc, value, index) => {
@@ -236,37 +208,61 @@ const winningCombos = [
   [0, 4, 8],
   [2, 4, 6],
 ];
+function checkWinAi() {
+  if (playerHasWon(spaces, ai) !== false) {
+    console.log("1");
+    bord.classList.add("stop-pres");
+    score2++;
+    scorePlayer2.textContent = score2;
+    scorePlayer2.classList.add("score-animation");
+    setTimeout(() => {
+      scorePlayer2.classList.remove("score-animation");
+      winningMessage.classList.remove("hide");
+    }, 2000);
+    winningMessage.innerHTML = `${ai} has won`;
+  }
 
-function playerHasWon(board) {
+  if (playerHasWon(spaces, ai) === false && !spaces.includes(null)) {
+    setTimeout(displayWinMes, 2400);
+    winningMessage.innerHTML = "Tie";
+  }
+}
+
+let playerHasWon = function (board, player) {
   for (const condition of winningCombos) {
     let [a, b, c] = condition;
 
-    if (board[a] && board[a] == board[b] && board[a] == board[c]) {
+    if (
+      board[a] &&
+      board[a] === board[b] &&
+      board[a] === board[c] &&
+      board[a] === player
+    ) {
       return [a, b, c];
     }
   }
   return false;
-}
-playerHasWon(spaces);
+};
+playerHasWon(spaces, currentPlayer);
 
 restartBtn.addEventListener("click", restart);
 
 function restart() {
   spaces.fill(null);
   bord.classList.remove("stop-pres");
+  winningMessage.classList.add("hide");
 
   squares.forEach((el) => {
     el.innerText = "";
     el.style.backgroundColor = "";
   });
 
-  // playerText.innerHTML = "Tic Tac Toe";
-
   currentPlayer = X_TEXT;
 }
 function resestScore() {
-  scorePLayer1 = 0;
-  scorePlayer2 = 0;
-  score.textContent = `Score:${scorePLayer1}-${scorePlayer2}`;
+  score1 = 0;
+  score2 = 0;
+  scorePLayer1.textContent = score1;
+  scorePlayer2.textContent = score2;
 }
 startGame();
