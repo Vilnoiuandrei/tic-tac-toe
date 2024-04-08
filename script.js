@@ -147,8 +147,9 @@ function aiImpossible() {
     setTimeout(displayTextAi, 600);
   }
   function minimax(board, depth, maximizingPlayer) {
+    // Find empty spaces on the board
     let emptySpaces = findEmptySpaces(board);
-
+    //Check if any player has won or if the game has ended in a ties
     if (playerHasWon(board, X_TEXT)) {
       return { score: -1 };
     } else if (playerHasWon(board, O_TEXT)) {
@@ -156,24 +157,28 @@ function aiImpossible() {
     } else if (emptySpaces.length === 0) {
       return { score: 0 };
     }
-
+    //store all possible moves
     const moves = [];
-
+    //// Iterate through each empty space
     for (let i = 0; i < emptySpaces.length; i++) {
       const move = {};
+      // Set the index of the empty space as the move index
       move.index = emptySpaces[i];
+      // Try the move for the current player
       board[emptySpaces[i]] = maximizingPlayer ? O_TEXT : X_TEXT;
-
+      //call minimax for the next depth
       const result = minimax(board, depth + 1, !maximizingPlayer);
       move.score = result.score;
 
       board[emptySpaces[i]] = null;
+      // Store the move in the moves array
       moves.push(move);
     }
 
     let bestMove;
     if (maximizingPlayer) {
       let bestScore = -Infinity;
+      // Find the move with the highest score
       for (let i = 0; i < moves.length; i++) {
         if (moves[i].score > bestScore) {
           bestScore = moves[i].score;
@@ -182,6 +187,7 @@ function aiImpossible() {
       }
     } else {
       let bestScore = Infinity;
+      // Find the move with the lowest score
       for (let i = 0; i < moves.length; i++) {
         if (moves[i].score < bestScore) {
           bestScore = moves[i].score;
