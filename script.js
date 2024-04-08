@@ -9,6 +9,14 @@ let scorePlayer2 = document.getElementById("player2");
 let score1 = 0;
 let score2 = 0;
 const winningMessage = document.querySelector(".winning-message");
+function findEmptySpaces(spaces) {
+  return spaces.reduce((acc, value, index) => {
+    if (!value) {
+      acc.push(index);
+    }
+    return acc;
+  }, []);
+}
 
 let gameMode = "Multiplayer";
 let dificulty = document.querySelector("select");
@@ -80,12 +88,8 @@ function boxClicked(e) {
   }
 }
 function aiEazy() {
-  let emptySpaces = spaces.reduce((acc, value, index) => {
-    if (!value) {
-      acc.push(index);
-    }
-    return acc;
-  }, []);
+  let emptySpaces = findEmptySpaces(spaces);
+
   if (emptySpaces.length > 0) {
     const randomIndex = Math.floor(Math.random() * emptySpaces.length);
     const aiMove = emptySpaces[randomIndex];
@@ -131,12 +135,7 @@ function aiMedium() {
 }
 
 function aiImpossible() {
-  let emptySpaces = spaces.reduce((acc, value, index) => {
-    if (!value) {
-      acc.push(index);
-    }
-    return acc;
-  }, []);
+  let emptySpaces = findEmptySpaces(spaces);
   if (emptySpaces.length > 0) {
     const bestMove = minimax(spaces.slice(), 0, true).index; // Call minimax
     spaces[bestMove] = ai;
@@ -148,7 +147,7 @@ function aiImpossible() {
     setTimeout(displayTextAi, 600);
   }
   function minimax(board, depth, maximizingPlayer) {
-    const emptySpaces = emptyIndexies(board);
+    let emptySpaces = findEmptySpaces(board);
 
     if (playerHasWon(board, X_TEXT)) {
       return { score: -1 };
@@ -194,15 +193,6 @@ function aiImpossible() {
     return moves[bestMove];
   }
   checkWinAi();
-
-  function emptyIndexies(board) {
-    return board.reduce((acc, value, index) => {
-      if (!value) {
-        acc.push(index);
-      }
-      return acc;
-    }, []);
-  }
 }
 const winningCombos = [
   [0, 1, 2],
