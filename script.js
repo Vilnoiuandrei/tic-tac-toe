@@ -40,11 +40,11 @@ function boxClicked(e) {
   const id = e.target.id;
 
   if (!spaces[id]) {
-    spaces[id] = currentPlayer;
-    e.target.innerText = currentPlayer;
-    score1++;
-    scorePLayer1.textContent = score1;
-    scorePLayer1.classList.add("score-animation");
+    // spaces[id] = currentPlayer;
+    // e.target.innerText = currentPlayer;
+    // score1++;
+    // scorePLayer1.textContent = score1;
+    // scorePLayer1.classList.add("score-animation");
     setTimeout(() => {
       scorePLayer1.classList.remove("score-animation");
       winningMessage.classList.remove("hide");
