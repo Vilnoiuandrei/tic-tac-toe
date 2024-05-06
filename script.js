@@ -41,7 +41,7 @@ function boxClicked(e) {
 
   if (!spaces[id]) {
     spaces[id] = currentPlayer;
-    // e.target.innerText = currentPlayer;
+    e.target.innerText = currentPlayer;
     // score1++;
     // scorePLayer1.textContent = score1;
     // scorePLayer1.classList.add("score-animation");
