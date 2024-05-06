@@ -59,7 +59,7 @@ h1 {
 button {
   z-index: 100;
   color: #904e9c;
-  /* background: #fae8b9; */
+  background: #fae8b9;
   display: block;
   align-items: center;
   appearance: none;
