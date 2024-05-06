@@ -42,7 +42,7 @@ function boxClicked(e) {
   if (!spaces[id]) {
     spaces[id] = currentPlayer;
     e.target.innerText = currentPlayer;
-    e.classList.add("fix-bug");
+    e.target.classList.add("fix-bug");
 
     if (playerHasWon(spaces, currentPlayer) !== false) {
       if (currentPlayer === X_TEXT) {
