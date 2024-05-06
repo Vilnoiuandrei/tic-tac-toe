@@ -42,6 +42,7 @@ function boxClicked(e) {
   if (!spaces[id]) {
     spaces[id] = currentPlayer;
     e.target.innerText = currentPlayer;
+    bord.classList.add("stop-pres");
 
     if (playerHasWon(spaces, currentPlayer) !== false) {
       if (currentPlayer === X_TEXT) {
