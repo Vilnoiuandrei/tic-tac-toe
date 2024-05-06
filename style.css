@@ -155,6 +155,9 @@ select {
   display: none;
 }
 @media only screen and (max-width: 44em) {
+  .container-button {
+    height: 25rem;
+  }
   .head {
     padding-top: 0;
   }
