@@ -22,7 +22,7 @@ body {
   align-items: center;
   grid-template-columns: repeat(3, auto);
   grid-template-rows: repeat(3, auto);
-  margin-top: 3rem;
+  margin-top: 10vh;
 }
 h1 {
   color: #e0a29e;
