@@ -22,7 +22,7 @@ body {
   align-items: center;
   grid-template-columns: repeat(3, auto);
   grid-template-rows: repeat(3, auto);
-  margin-top: 10vh;
+  margin-top: 7vh;
 }
 h1 {
   color: #e0a29e;
@@ -155,12 +155,12 @@ select {
   display: none;
 }
 @media only screen and (max-width: 44em) {
-  .main-component {
-    margin-top: 9vh;
+  .head {
+    padding-top: 0;
   }
   .el {
-    width: 10rem;
-    height: 10rem;
+    width: 30vw;
+    height: 30vw;
   }
 
   button {
