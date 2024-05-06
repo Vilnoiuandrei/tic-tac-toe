@@ -44,7 +44,7 @@ function boxClicked(e) {
     e.target.innerText = currentPlayer;
     score1++;
     scorePLayer1.textContent = score1;
-    scorePLayer1.classList.add("score-animation");
+    // scorePLayer1.classList.add("score-animation");
     // setTimeout(() => {
     //   scorePLayer1.classList.remove("score-animation");
     //   winningMessage.classList.remove("hide");
