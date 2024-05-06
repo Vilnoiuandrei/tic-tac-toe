@@ -41,7 +41,7 @@ function boxClicked(e) {
 
   if (!spaces[id]) {
     spaces[id] = currentPlayer;
-    winningMessage.innerHTML = `${currentPlayer} has won`;
+    e.target.innerText = currentPlayer;
 
     if (playerHasWon(spaces, currentPlayer) !== false) {
       if (currentPlayer === X_TEXT) {
@@ -71,19 +71,18 @@ function boxClicked(e) {
     ) {
       winningMessage.classList.remove("hide");
       winningMessage.innerHTML = "Tie";
-    } else {
-      if (gameMode === "Multiplayer") {
-        currentPlayer = currentPlayer == X_TEXT ? O_TEXT : X_TEXT;
-      }
-      if (gameMode === "Eazy") {
-        aiEazy();
-      }
-      if (gameMode === "Medium") {
-        aiMedium();
-      }
-      if (gameMode === "Impossible") {
-        aiImpossible();
-      }
+    }
+    if (gameMode === "Multiplayer") {
+      currentPlayer = currentPlayer == X_TEXT ? O_TEXT : X_TEXT;
+    }
+    if (gameMode === "Eazy") {
+      aiEazy();
+    }
+    if (gameMode === "Medium") {
+      aiMedium();
+    }
+    if (gameMode === "Impossible") {
+      aiImpossible();
     }
   }
 }
