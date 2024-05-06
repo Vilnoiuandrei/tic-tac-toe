@@ -42,13 +42,8 @@ function boxClicked(e) {
   if (!spaces[id]) {
     spaces[id] = currentPlayer;
     e.target.innerText = currentPlayer;
-    score1++;
-    scorePLayer1.textContent = score1;
-    // scorePLayer1.classList.add("score-animation");
-    // setTimeout(() => {
-    //   scorePLayer1.classList.remove("score-animation");
-    //   winningMessage.classList.remove("hide");
-    // }, 1000);
+
+    scorePLayer1.classList.add("score-animation");
 
     if (playerHasWon(spaces, currentPlayer) !== false) {
       if (currentPlayer === X_TEXT) {
