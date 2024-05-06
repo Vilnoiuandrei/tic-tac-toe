@@ -15,9 +15,7 @@ body {
   align-content: center;
   justify-content: center;
 }
-.fix-bug {
-  font-size: 101%;
-}
+
 .main-component {
   display: grid;
   justify-content: center;
